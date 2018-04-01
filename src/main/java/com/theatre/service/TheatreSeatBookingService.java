@@ -1,5 +1,7 @@
 package com.theatre.service;
 
+import java.util.List;
+
 import com.theatre.model.BookingMembers;
 import com.theatre.model.TheatreRows;
 
@@ -10,5 +12,5 @@ import com.theatre.model.TheatreRows;
  *
  */
 public interface TheatreSeatBookingService {
-	void processBookingRequests(TheatreRows rows, BookingMembers members);
+	List<String> processBookingRequests(TheatreRows rows, BookingMembers members);
 }

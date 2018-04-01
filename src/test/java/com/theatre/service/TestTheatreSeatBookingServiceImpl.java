@@ -1,6 +1,5 @@
 package com.theatre.service;
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
@@ -22,6 +21,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import com.theatre.model.BookingMembers;
 import com.theatre.model.TheatreRows;
 import com.theatre.utils.TheatreUtils;
+import static org.junit.Assert.*;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ TheatreUtils.class })
@@ -48,36 +48,60 @@ public class TestTheatreSeatBookingServiceImpl {
 		MockitoAnnotations.initMocks(this);
 		PowerMockito.mockStatic(TheatreUtils.class);
 	}
+
 	@Test
 	public void testProcessBookingRequests_Failure() {
 		TheatreRows rows = null;
 		BookingMembers members = null;
 		when(TheatreUtils.isValidInput(rows, members)).thenReturn(false);
-		theatreSeatBookingServiceImpl.processBookingRequests(rows, members);
+		List<String> bookingStatuses = theatreSeatBookingServiceImpl.processBookingRequests(rows, members);
+		assertEquals(bookingStatuses.size(), 0);
 		PowerMockito.verifyStatic(times(1));
 	}
 
 	@Test
-	public void testProcessBookingRequests_Success() {
+	public void testProcessBookingRequests_SuccessWithSplit() {
 		List<List<Integer>> finalRow = new ArrayList<List<Integer>>();
 		List<Integer> row = new ArrayList<Integer>();
 		List<String> name = new ArrayList<String>();
 		TheatreRows rows = new TheatreRows();
 		BookingMembers members = new BookingMembers();
-		row.add(6);row.add(6);
+		row.add(6);
+		row.add(6);
 		name.add("Smith 2");
 		finalRow.add(row);
 		rows.setRow(finalRow);
 		members.setName(name);
 		members.setPartyCount(2);
-	
+
 		when(TheatreUtils.isValidInput(rows, members)).thenReturn(true);
-		theatreSeatBookingServiceImpl.processBookingRequests(rows, members);
+		List<String> bookingStatuses = theatreSeatBookingServiceImpl.processBookingRequests(rows, members);
+		assertEquals(bookingStatuses.size(), 1);
+		assertEquals(bookingStatuses.get(0), "Smith Row 1 Section 1");
 		PowerMockito.verifyStatic(times(1));
 	}
-	
-	public void testProcessBookingRequests_Success_Message() {
-		
+
+	@Test
+	public void testProcessBookingRequestsCanNotBeHandled() {
+		List<List<Integer>> finalRow = new ArrayList<List<Integer>>();
+		List<Integer> row = new ArrayList<Integer>();
+		List<String> name = new ArrayList<String>();
+		TheatreRows rows = new TheatreRows();
+		BookingMembers members = new BookingMembers();
+		row.add(6);
+		row.add(6);
+		name.add("Smith 14");
+		finalRow.add(row);
+		rows.setRow(finalRow);
+		members.setName(name);
+		members.setPartyCount(2);
+
+		when(TheatreUtils.isValidInput(rows, members)).thenReturn(true);
+		List<String> bookingStatuses = theatreSeatBookingServiceImpl.processBookingRequests(rows, members);
+		assertEquals(bookingStatuses.size(), 1);
+		assertEquals(bookingStatuses.get(0), "Smith Sorry, we can't handle your party.");
+		PowerMockito.verifyStatic(times(1));
+
 	}
 
 }
