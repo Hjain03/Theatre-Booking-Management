@@ -72,9 +72,11 @@ Sample input:
 
 ```
 6 a
-Sorry , The given input can only accept Number . Please try again..!
+Sorry,The input given is expected to be Number seperated by space for section in rows e.g '4 4 5' . Please try again..!
 6 6 
 
+# 2
+Sorry,The input given is expected to be Characters seperated by space followed by number e.g 'ABC 3' . Please try again..!
 Smith 2
 ```
 Sample output:
@@ -108,4 +110,3 @@ You can test code compliances using SonarLint plugin available in eclipse .
 ## Authors
 
 * **Himanshu Jain** - *Initial work* - [Hjain](https://github.com/Hjain03)
-

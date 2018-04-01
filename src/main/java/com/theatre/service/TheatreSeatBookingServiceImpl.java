@@ -1,5 +1,6 @@
 package com.theatre.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.theatre.model.BookingMembers;
@@ -21,18 +22,20 @@ public class TheatreSeatBookingServiceImpl implements TheatreSeatBookingService 
 	 * Implementation of the Interface Method which will process all the booking
 	 * request as FIFO basis
 	 */
-	@Override
-	public void processBookingRequests(TheatreRows rows, BookingMembers members) {
+	public List<String> processBookingRequests(TheatreRows rows, BookingMembers members) {
+		List<String> bookinStatuses = new ArrayList<String>();
 		if (TheatreUtils.isValidInput(rows, members)) {
 			for (String customer : members.getName()) {
 				String[] temp = customer.split(" ");
 				members.setPartyCount(Integer.parseInt(temp[1]));
-				checkAndAllocateSeats(rows, members, temp[0]);
+				String bookingStatus = checkAndAllocateSeats(rows, members, temp[0]);
+				TheatreUtils.printMessage(bookingStatus);
+				bookinStatuses.add(bookingStatus);
 			}
 		} else {
 			TheatreUtils.printMessage(message);
 		}
-
+		return bookinStatuses;
 	}
 
 	/**
@@ -43,33 +46,33 @@ public class TheatreSeatBookingServiceImpl implements TheatreSeatBookingService 
 	 * Each party must sit in a single row in a single section. If they won't fit,
 	 * tell them "Call to split party".
 	 */
-	private static void checkAndAllocateSeats(TheatreRows rows, BookingMembers members, String name) {
-		int valueOfi = -1;
-		int valueOfj = -1;
-		int sum = 0;
-		for (int i = 0; i < rows.getRow().size(); i++) {
-			List<Integer> row = rows.getRow().get(i);
-			for (int j = 0; j < row.size(); j++) {
-				sum += row.get(j);
-				if (row.get(j) == members.getPartyCount()
-						|| (row.get(j) > members.getPartyCount() && row.get(j) % members.getPartyCount() == 0)) {
-					valueOfi = i;
-					valueOfj = j;
+	private static String checkAndAllocateSeats(TheatreRows rows, BookingMembers members, String name) {
+		int valueOfRow = -1;
+		int valueOfSection = -1;
+		int sumOfSeats = 0;
+		for (int row = 0; row < rows.getRow().size(); row++) {
+			List<Integer> tempRow = rows.getRow().get(row);
+			for (int section = 0; section < tempRow.size(); section++) {
+				sumOfSeats += tempRow.get(section);
+				if (tempRow.get(section) == members.getPartyCount() || (tempRow.get(section) > members.getPartyCount()
+						&& tempRow.get(section) % members.getPartyCount() == 0)) {
+					valueOfRow = row;
+					valueOfSection = section;
 					break;
 				}
 			}
-			if (valueOfi == i) {
+			if (valueOfRow == row) {
 				break;
 			}
 		}
-		getAllocationStatus(valueOfi, valueOfj, rows, members, name, sum);
+		return getAllocationStatus(valueOfRow, valueOfSection, rows, members, name, sumOfSeats);
 	}
 
 	/**
 	 * 
-	 * @param indexOfi
+	 * @param valueOfRow
 	 *            : Current index of iterator i after serving requests
-	 * @param indexOfj
+	 * @param valueOfSection
 	 *            : Current index of iterator j after serving requests
 	 * @param rows
 	 *            : Instance of TheatreRows Class contains the layout and section
@@ -77,36 +80,34 @@ public class TheatreSeatBookingServiceImpl implements TheatreSeatBookingService 
 	 * @param members
 	 *            : Instance of BookingMembers Class contains the Member information
 	 *            and Party count request.
-	 * @param name
+	 * @param memberName
 	 *            : Variable containing name of member whose request is getting
 	 *            served .
-	 * @param sum
+	 * @param sumOfSeats
 	 *            : Summation of the seats information getting used per request .
 	 *            This method delegate the status of ticket booking to print on the
 	 *            console using Utility Class.
 	 * 
 	 */
-	private static void getAllocationStatus(int indexOfi, int indexOfj, TheatreRows rows, BookingMembers members,
-			String name, int sum) {
-		String result;
-		if (indexOfi != -1 && indexOfj != -1) {
-			result = name + " Row " + (indexOfi + 1) + " Section " + (indexOfj + 1);
-			TheatreUtils.printMessage(result);
-			List<Integer> row = rows.getRow().get(indexOfi);
-			int temp = row.get(indexOfj);
-			row.remove((int) indexOfj);
-			row.add(indexOfj, temp - members.getPartyCount());
-			return;
+	private static String getAllocationStatus(int valueOfRow, int valueOfSection, TheatreRows rows,
+			BookingMembers members, String memberName, int sumOfSeats) {
+		String result = null;
+		boolean isDone = true;
+		if (valueOfRow != -1 && valueOfSection != -1) {
+			result = memberName + " Row " + (valueOfRow + 1) + " Section " + (valueOfSection + 1);
+			List<Integer> row = rows.getRow().get(valueOfRow);
+			int temp = row.get(valueOfSection);
+			row.remove((int) valueOfSection);
+			row.add(valueOfSection, temp - members.getPartyCount());
+			isDone = false;
 		}
-		if (members.getPartyCount() <= sum) {
-			result = name + " Call to split party.";
-			TheatreUtils.printMessage(result);
-			return;
-		} else {
-			result = name + " Sorry, we can't handle your party.";
-			TheatreUtils.printMessage(result);
-			return;
+		if (isDone) {
+			if (members.getPartyCount() <= sumOfSeats) {
+				result = memberName + " Call to split party.";
+			} else {
+				result = memberName + " Sorry, we can't handle your party.";
+			}
 		}
-
+		return result;
 	}
 }

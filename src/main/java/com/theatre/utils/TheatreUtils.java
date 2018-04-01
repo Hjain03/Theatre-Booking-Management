@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 import com.theatre.model.BookingMembers;
 import com.theatre.model.TheatreRows;
+import com.theatre.utils.exception.InvalidRowInputException;
 
 /**
  * 
@@ -18,14 +19,22 @@ import com.theatre.model.TheatreRows;
 public class TheatreUtils {
 
 	private static Scanner scanner;
-	// Regular expression in Java to check if String is number or not
-	private static final Pattern pattern = Pattern.compile("([ ]*+[0-9]++[ ]*+)+");
+	// Regular expression for Row to check if input string is in the format "number
+	// number" .
+	private static final Pattern patternForRow = Pattern.compile("([ ]*+[0-9]++[ ]*+)+");
+	// Regular expression for member request to check if input string is in the
+	// format "char number"
+	private static final Pattern patternForNames = Pattern.compile("([ ]*+[0-9A-Za-z]++[ ]*+)+");
 
 	/*
 	 * private constructor declaration to hide the implicit public constructor for
 	 * this class
 	 */
 	private TheatreUtils() {
+	}
+
+	public static void setInputReader(Scanner extScanner) {
+		scanner = extScanner;
 	}
 
 	/**
@@ -36,16 +45,22 @@ public class TheatreUtils {
 	 */
 	public static List<List<Integer>> inputRows() {
 		scanner = new Scanner(System.in);
-		List<List<Integer>> rows = new ArrayList<>();
+		List<List<Integer>> rows = new ArrayList<List<Integer>>();
 		while (true) {
 			String line = scanner.nextLine();
 			if (line.trim().length() > 0) {
-				if (pattern.matcher(line).matches()) {
-					rows.add(parseStringAndReturnNumbers(line));
+				if (patternForRow.matcher(line).matches()) {
+					try {
+						rows.add(parseStringAndReturnNumbers(line));
+					} catch (InvalidRowInputException irie) {
+						TheatreUtils.printMessage(irie.getMessage());
+					}
 				} else {
-					TheatreUtils.printMessage("Sorry , The given input can only accept Number . Please try again..!");
+					TheatreUtils.printMessage(
+							"Sorry,The input given is expected to be Number seperated by space for section in rows e.g '4 4 5' . Please try again..!");
 					continue;
 				}
+
 			} else
 				break;
 		}
@@ -58,15 +73,15 @@ public class TheatreUtils {
 	 *            is each set of section contains in row
 	 * @return List of Integer
 	 */
-	private static List<Integer> parseStringAndReturnNumbers(String line) {
-		List<Integer> row = new ArrayList<>();
+	private static List<Integer> parseStringAndReturnNumbers(String line) throws InvalidRowInputException {
+		List<Integer> row = new ArrayList<Integer>();
 		try {
 			String[] temp = line.split(" ");
 			for (int i = 0; i < temp.length; i++) {
 				row.add(Integer.parseInt(temp[i]));
 			}
 		} catch (NumberFormatException nfe) {
-			nfe.printStackTrace();
+			throw new InvalidRowInputException(" Row [" + line + "] contains non integer value");
 		}
 		return row;
 	}
@@ -78,11 +93,16 @@ public class TheatreUtils {
 	 *         Required (Space Separated).
 	 */
 	public static List<String> inputNames() {
-		List<String> names = new ArrayList<>();
+		List<String> names = new ArrayList<String>();
 		while (true) {
 			String line = scanner.nextLine();
 			if (line.trim().length() > 0) {
-				names.add(line);
+				if (patternForNames.matcher(line).matches()) {
+					names.add(line);
+				} else {
+					TheatreUtils.printMessage(
+							"Sorry,The input given is expected to be Characters seperated by space followed by number e.g 'ABC 3' . Please try again..!");
+				}
 			} else
 				break;
 		}
@@ -95,7 +115,7 @@ public class TheatreUtils {
 	 * 
 	 * @param rows
 	 * @param members
-	 * @return Truw if all rows contains Integer and all members are String Type.
+	 * @return True if all rows contains Integer and all members are String Type.
 	 */
 	public static boolean isValidInput(TheatreRows rows, BookingMembers members) {
 		boolean isValid = true;
