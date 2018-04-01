@@ -19,21 +19,18 @@ For installing Java use this URL
 
 ```
 https://www.java.com/en/download/help/download_options.xml
-
 ```
 
 For installing Maven use this URL 
 
 ```
 https://maven.apache.org/install.html
-
 ```
 
 After successful installation of Prerequisites . In a development environment, use the following call to build and install artifacts into the local repository.
 
 ```
 mvn install
-
 ```
 Please run the project as Java Application to start its execution .
 After running the application . You have to enter the input as per specified in the requirement 
@@ -55,7 +52,6 @@ Johnson 3
 Williams 4
 Brown 8
 Miller 12
-
 ```
 Your program must produce results to standard output in the same order as the requests, with the name of the person who requested the ticket and either the row and section of the ticket or the explanations "Sorry, we can't handle your party" or "Call to split party."
 
@@ -70,7 +66,6 @@ Johnson Row 2 Section 1
 Williams Row 1 Section 1
 Brown Row 4  Section 2
 Miller Call to split party
-
 ```
 In case of Wrong Input you will be prompted again to enter correct one as Theatre layout requires only Numbers not characters 
 Sample input:
@@ -81,13 +76,11 @@ Sorry , The given input can only accept Number . Please try again..!
 6 6 
 
 Smith 2
-
 ```
 Sample output:
 
 ```
 Smith Row 1 Section 1
-
 ```
 
 ## Running the tests
@@ -102,7 +95,6 @@ For Example:
 
 ```
 mvn test
-
 ```
 
 ### And coding style tests
