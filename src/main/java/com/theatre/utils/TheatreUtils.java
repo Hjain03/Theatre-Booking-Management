@@ -19,12 +19,12 @@ import com.theatre.utils.exception.InvalidRowInputException;
 public class TheatreUtils {
 
 	private static Scanner scanner;
-	// Regular expression for Row to check if input string is in the format "number
-	// number" .
+	// Regular expression for Row as format "number number" .
 	private static final Pattern patternForRow = Pattern.compile("([ ]*+[0-9]++[ ]*+)+");
-	// Regular expression for member request to check if input string is in the
-	// format "char number"
+	// Regular expression for Member Request as format "char number"
 	private static final Pattern patternForNames = Pattern.compile("([ ]*+[0-9A-Za-z]++[ ]*+)+");
+	private static String rowValidationMessage = "Sorry,The input given is expected to be Number seperated by space for section in rows e.g '4 4 5' . Please try again..!";
+	private static String requestValidationMessage = "Sorry,The input given is expected to be Characters seperated by space followed by number e.g 'ABC 3' . Please try again..!";
 
 	/*
 	 * private constructor declaration to hide the implicit public constructor for
@@ -56,8 +56,7 @@ public class TheatreUtils {
 						TheatreUtils.printMessage(irie.getMessage());
 					}
 				} else {
-					TheatreUtils.printMessage(
-							"Sorry,The input given is expected to be Number seperated by space for section in rows e.g '4 4 5' . Please try again..!");
+					TheatreUtils.printMessage(rowValidationMessage);
 					continue;
 				}
 
@@ -92,7 +91,7 @@ public class TheatreUtils {
 	 * @return List of String which contains the Name of Member and No. of Seats
 	 *         Required (Space Separated).
 	 */
-	public static List<String> inputNames() {
+	public static List<String> inputRequests() {
 		List<String> names = new ArrayList<String>();
 		while (true) {
 			String line = scanner.nextLine();
@@ -100,8 +99,7 @@ public class TheatreUtils {
 				if (patternForNames.matcher(line).matches()) {
 					names.add(line);
 				} else {
-					TheatreUtils.printMessage(
-							"Sorry,The input given is expected to be Characters seperated by space followed by number e.g 'ABC 3' . Please try again..!");
+					TheatreUtils.printMessage(requestValidationMessage);
 				}
 			} else
 				break;
@@ -127,17 +125,14 @@ public class TheatreUtils {
 					}
 				}
 			}
-
 			for (String name : members.getName()) {
 				if (!(name instanceof String)) {
 					throw new NumberFormatException();
 				}
 			}
-
 		} catch (NumberFormatException ex) {
 			isValid = false;
 		}
-
 		return isValid;
 	}
 

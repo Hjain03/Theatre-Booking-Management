@@ -33,6 +33,16 @@ After successful installation of Prerequisites . In a development environment, u
 mvn install
 ```
 Please run the project as Java Application to start its execution .
+There are two ways to run this project . 
+
+1.Use eclipse IDE and Run the Project as Java Application .
+
+2. Using Command Line . In "Theatre-Booking-Management" folder (where pom.xml is present) 
+   Run the Below command :
+
+```
+mvn exec:java -Dexec.mainClass="com.theatre.app.TheatreSeatBooking"
+```
 After running the application . You have to enter the input as per specified in the requirement 
 
 Sample input:

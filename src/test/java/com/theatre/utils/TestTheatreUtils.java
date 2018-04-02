@@ -1,6 +1,7 @@
 package com.theatre.utils;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -9,7 +10,6 @@ import java.util.List;
 import java.util.Scanner;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -24,10 +24,16 @@ import com.theatre.model.BookingMembers;
 import com.theatre.model.TheatreRows;
 import com.theatre.utils.exception.InvalidRowInputException;
 
+/**
+ * 
+ * @author Himanshu Jain Testing class for TheatreUtils class which covers its
+ *         unit test cases.
+ *
+ */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ TheatreUtils.class, Scanner.class })
 public class TestTheatreUtils {
-
+	/* Attributes declaration */
 	Scanner mockScanner = null;
 	int lineNumber = 0;
 	List<List<Integer>> expectedRows1 = null;
@@ -44,26 +50,10 @@ public class TestTheatreUtils {
 		mockAndInitializeObjects();
 	}
 
-	@Test
-	public void testInputRowsSuccess() {
-
-		TheatreUtils.setInputReader(mockScanner);
-		MockToReadValidRowsFromConsole();
-		List<List<Integer>> rows = TheatreUtils.inputRows();
-		assertTrue(rows.size() == expectedRows1.size());
-		verifyExpectedAndActualOutput(rows, expectedRows1);
-	}
-
-	@Test
-	public void testInputRowsSecondRowInvalid() {
-
-		TheatreUtils.setInputReader(mockScanner);
-		MockToReadRowsWithSecondRowHavingNonNumericValue();
-		List<List<Integer>> rows = TheatreUtils.inputRows();
-		assertTrue(rows.size() == expectedRows2.size());
-		verifyExpectedAndActualOutput(rows, expectedRows2);
-	}
-
+	/*
+	 * Testing of parseStringAndReturnNumbers method for failure case where it
+	 * contains non numeric value and throwing InvalidRowInputException
+	 */
 	@Test
 	public void TestParseStringAndReturnNumbersInputContainsNonNumericValue()
 			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
@@ -72,13 +62,12 @@ public class TestTheatreUtils {
 			TheatreUtils.setInputReader(mockScanner);
 			MockToReadValidRowsFromConsole();
 		} catch (Exception ex) {
-			// asert that thrown exception is same as the method invoked throws and message
-			// is also same
 			assertTrue(ex.getCause() instanceof InvalidRowInputException);
 			assertTrue((" Row [" + inputLine + "] contains non integer value").equals(ex.getCause().getMessage()));
 		}
 	}
 
+	/* Testing of parseStringAndReturnNumbers method for success case */
 	@Test
 	public void TestParseStringAndReturnNumbersSuccess()
 			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
@@ -93,64 +82,57 @@ public class TestTheatreUtils {
 
 	}
 
+	/* Testing of inputRequests method for success case and valid input*/
 	@Test
-	public void TestInputNamesWithValidInputs() {
+	public void TestInputRequestsWithValidInputs() {
 
 		TheatreUtils.setInputReader(mockScanner);
 		MockToReadPartyOrdersFromConsole();
-		List<String> actualOrders = TheatreUtils.inputNames();
+		List<String> actualOrders = TheatreUtils.inputRequests();
 		assertTrue(actualOrders.size() == expectedOrders.size());
 		assertTrue(actualOrders.containsAll(expectedOrders));
 	}
 
+	/* Testing of inputRequests method for one empty input line*/
 	@Test
-	public void TestInputNamesWithOneEmptyInputLine() {
+	public void TestInputRequestsWithOneEmptyInputLine() {
 
 		TheatreUtils.setInputReader(mockScanner);
 		MockToReadPartyOrdersFromConsoleWithEmptyInputLine();
-		List<String> actualOrders = TheatreUtils.inputNames();
+		List<String> actualOrders = TheatreUtils.inputRequests();
 		assertTrue(actualOrders.size() == expectedOrders.size());
 		assertTrue(actualOrders.containsAll(expectedOrders));
 	}
 
+	/* Testing of isValidInput method for success case */
 	@Test
 	public void TestisValidInputReturnsTrue() {
 		// both input valid
 		boolean isValid = TheatreUtils.isValidInput(validRows, validMembers);
 		assertTrue(isValid);
 	}
-
+	
+	/* Testing of isValidInput method for failure case i.e invalid theater rows */
+	@Test
 	public void TestisValidInputReturnsFalseWithInvalidTheatreRows() {
-		// first input arg TheatreRows is not valid
-
 		boolean isValid = TheatreUtils.isValidInput(invalidRows, validMembers);
 		assertFalse(isValid);
 	}
 
+	/* Testing of isValidInput method for failure case i.e invalid booking members */
+	@Test
 	public void TestisValidInputReturnsFalseWithInvalidBookingMembers() {
-		// second input arg BookingMembers is not valid
-
 		boolean isValid = TheatreUtils.isValidInput(validRows, invalidMembers);
 		assertFalse(isValid);
 	}
 
+	/* Testing of isValidInput method for failure case both invalid i.e Theatre Rows & Booking Members */
+	@Test
 	public void TestisValidInputReturnsFalseWithBothArgsInvalid() {
-		// both input arg BookingMembers and TheatreRows are not valid
-
 		boolean isValid = TheatreUtils.isValidInput(invalidRows, invalidMembers);
 		assertFalse(isValid);
 	}
-
-	private void verifyExpectedAndActualOutput(List<List<Integer>> rows, List<List<Integer>> rowsOutput) {
-		for (int i = 0; i < rows.size(); i++) {
-			List<Integer> outputRow = rows.get(i);
-			List<Integer> expectedRow = rowsOutput.get(i);
-			assertTrue(outputRow.size() == expectedRow.size());
-			assertTrue(outputRow.containsAll(expectedRow));
-		}
-
-	}
-
+	
 	private void mockAndInitializeObjects() {
 		mockScanner = PowerMockito.mock(Scanner.class);
 		PowerMockito.mockStatic(Scanner.class);
@@ -162,14 +144,14 @@ public class TestTheatreUtils {
 		firstRow.add(5);
 		List<Integer> secondRow = new ArrayList<Integer>();
 
-		secondRow.add(4);
+		secondRow.add(null);
 		secondRow.add(6);
 		secondRow.add(5);
 
 		expectedRows1.add(firstRow);
-		expectedRows1.add(secondRow);
+		//expectedRows1.add(secondRow);
 		expectedRows2 = new ArrayList<List<Integer>>();
-		expectedRows2.add(firstRow);
+		expectedRows2.add(secondRow);
 
 		validRows = new TheatreRows();
 		validRows.setRow(expectedRows1);
@@ -178,14 +160,15 @@ public class TestTheatreUtils {
 		invalidRows.setRow(expectedRows2);
 
 		validMembers = new BookingMembers();
-		List<String> validOrders = new ArrayList<String>();
-		validOrders.add("Smith 5");
-		validMembers.setName(validOrders);
+		List<String> validRequest = new ArrayList<String>();
+		validRequest.add("Smith 5");
+		validMembers.setName(validRequest);
 
 		invalidMembers = new BookingMembers();
-		List<String> invalidOrders = new ArrayList<String>();
-		invalidOrders.add("Smith 5");
-		invalidOrders.add("4 Smith");
+		List<String> invalidRequest = new ArrayList<String>();
+		invalidRequest.add("Smith 5");
+		invalidRequest.add(null);
+		invalidMembers.setName(invalidRequest);
 
 	}
 
