@@ -1,10 +1,10 @@
 package com.theatre.app;
 
 import java.util.Scanner;
+
 import com.theatre.model.BookingMembers;
 import com.theatre.model.TheatreRows;
-import com.theatre.service.TheatreSeatBookingService;
-import com.theatre.service.TheatreSeatBookingServiceImpl;
+import com.theatre.service.TheatreSeatBookingFactory;
 import com.theatre.utils.TheatreUtils;
 
 /**
@@ -18,7 +18,6 @@ public class TheatreSeatBooking {
 	static Scanner scanner;
 
 	public static void main(String[] args) {
-
 		/*
 		 * Taking Input from user using console for creating theatre layout and incoming
 		 * request . Please follow the Input Format : The theater layout is made up of 1
@@ -30,16 +29,15 @@ public class TheatreSeatBooking {
 		TheatreRows rows = new TheatreRows();
 		BookingMembers members = new BookingMembers();
 		rows.setRow(TheatreUtils.inputRows());
-		members.setName(TheatreUtils.inputNames());
+		members.setName(TheatreUtils.inputRequests());
 
 		/*
 		 * Now after taking the Theatre layout details and Request for the Ticket
-		 * seating arrangement we will apply our business logic to allocate as much
-		 * requests as possible.
+		 * seating arrangement we will using Facorty Pattern to call the Implementation
+		 * class for business logic to allocate as much requests as possible.
 		 */
 		try {
-			TheatreSeatBookingService bookingService = new TheatreSeatBookingServiceImpl();
-			bookingService.processBookingRequests(rows, members);
+			TheatreSeatBookingFactory.processBookingFactoryRequests(rows, members);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
