@@ -34,11 +34,12 @@ public class TheatreSeatBooking {
 
 		/*
 		 * Now after taking the Theatre layout details and Request for the Ticket
-		 * seating arrangement we will using Facorty Pattern to call the Implementation
-		 * class for business logic to allocate as much requests as possible.
+		 * seating arrangement we will using Facorty Pattern to create the instance of
+		 * service impl class for business logic to delegate object creation and concern
+		 * to factory class.
 		 */
 		try {
-			TheatreSeatBookingService bookingService = TheatreSeatBookingFactory.createFactoryInstance(rows, members);
+			TheatreSeatBookingService bookingService = TheatreSeatBookingFactory.createInstance();
 			bookingService.processBookingRequests(rows, members);
 		} catch (Exception e) {
 			e.printStackTrace();
