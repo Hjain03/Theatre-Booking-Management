@@ -16,8 +16,8 @@ public class TheatreSeatBookingFactory {
 	}
 
 	/*
-	 * This method is used to process the booking request as per the Type of Theatre
-	 * Row and Booking members . Usage of Factory pattern will increase the scope
+	 * This method is used to return the Impl class we need to call as per the requested 
+	 * Models.Usage of Factory pattern will increase the scope
 	 * further extension or enhancement in different types of theatre which can be
 	 * implemented using factory class. Factory class will delegate call to
 	 * specified Impl class .
@@ -25,16 +25,6 @@ public class TheatreSeatBookingFactory {
 	 * We can also go with Proxy Pattern too if we want to expose our application as
 	 * service so that it can be consumed using Proxy obj.
 	 */
-	public static void processBookingFactoryRequests(TheatreRows rows, BookingMembers members) {
-
-		if (rows instanceof TheatreRows && members instanceof BookingMembers) {
-			TheatreSeatBookingService bookingService = new TheatreSeatBookingServiceImpl();
-			bookingService.processBookingRequests(rows, members);
-		} else {
-			System.out.println("Factory Class does not recognize Instance Type");
-		}
-	}
-
 	public static TheatreSeatBookingService createFactoryInstance(TheatreRows rows, BookingMembers members) {
 		if (rows instanceof TheatreRows && members instanceof BookingMembers) {
 			return new TheatreSeatBookingServiceImpl();
