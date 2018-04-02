@@ -5,6 +5,7 @@ import java.util.Scanner;
 import com.theatre.model.BookingMembers;
 import com.theatre.model.TheatreRows;
 import com.theatre.service.TheatreSeatBookingFactory;
+import com.theatre.service.TheatreSeatBookingService;
 import com.theatre.utils.TheatreUtils;
 
 /**
@@ -37,7 +38,8 @@ public class TheatreSeatBooking {
 		 * class for business logic to allocate as much requests as possible.
 		 */
 		try {
-			TheatreSeatBookingFactory.processBookingFactoryRequests(rows, members);
+			TheatreSeatBookingService bookingService = TheatreSeatBookingFactory.createFactoryInstance(rows, members);
+			bookingService.processBookingRequests(rows, members);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
