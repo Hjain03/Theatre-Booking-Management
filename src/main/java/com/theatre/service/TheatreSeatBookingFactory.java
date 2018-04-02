@@ -1,8 +1,5 @@
 package com.theatre.service;
 
-import com.theatre.model.BookingMembers;
-import com.theatre.model.TheatreRows;
-
 /**
  * 
  * @author Himanshu Jain This is TheatreSeatBooking Factory Class which will be
