@@ -34,4 +34,13 @@ public class TheatreSeatBookingFactory {
 			System.out.println("Factory Class does not recognize Instance Type");
 		}
 	}
+
+	public static TheatreSeatBookingService createFactoryInstance(TheatreRows rows, BookingMembers members) {
+		if (rows instanceof TheatreRows && members instanceof BookingMembers) {
+			return new TheatreSeatBookingServiceImpl();
+			}else {
+				return null;
+			}
+	}
+
 }
