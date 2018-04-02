@@ -36,8 +36,7 @@ Please run the project as Java Application to start its execution .
 There are two ways to run this project . 
 
 1.Use eclipse IDE and Run the Project as Java Application .
-
-2. Using Command Line . In "Theatre-Booking-Management" folder (where pom.xml is present) 
+2.Using Command Line . In "Theatre-Booking-Management" folder (where pom.xml is present) 
    Run the Below command :
 
 ```
@@ -48,12 +47,14 @@ After running the application . You have to enter the input as per specified in 
 Sample input:
 
 ```
+Welcome,Please enter Layout details as no. of seats in section separated by space e.g  '2 2' .Press Enter to Start Entering Booking Request..!
 6 6
 3 5 5 3
 4 6 6 4
 2 8 8 2
 6 6
 
+Please enter Booking Request with name and no. tickets separated by space 'ABC 3' .Press Enter to View Booking Allocation Status and Exit..!
 Smith 2
 Jones 5
 Davis 6
@@ -77,16 +78,18 @@ Williams Row 1 Section 1
 Brown Row 4  Section 2
 Miller Call to split party
 ```
-In case of Wrong Input you will be prompted again to enter correct one as Theatre layout requires only Numbers not characters 
+In case of Wrong Input you will be prompted again to enter correct one as Theatre layout requires only Numbers not characters in the format "2 2 3" and Booking Request requires Name and Party count (No. of tickets) for e.g "Smith 2" (You cannot enter more party count on same row on a single member name)
 Sample input:
 
 ```
+Welcome,Please enter Layout details as no. of seats in section separated by space e.g  '2 2' .Press Enter to Start Entering Booking Request..!
 6 a
-Sorry,The input given is expected to be Number seperated by space for section in rows e.g '4 4 5' . Please try again..!
+Sorry,The input given is expected to be Number separated by space for section in rows e.g '4 4 5' . Please try again..!
 6 6 
 
-# 2
-Sorry,The input given is expected to be Characters seperated by space followed by number e.g 'ABC 3' . Please try again..!
+Please enter Booking Request with name and no. tickets separated by space 'ABC 3' .Press Enter to View Booking Allocation Status and Exit..!
+Smith 2 2
+Sorry,The input given is expected to be Characters separated by space followed by number e.g 'ABC 3' . Please try again..!
 Smith 2
 ```
 Sample output:

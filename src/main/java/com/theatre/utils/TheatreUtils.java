@@ -25,8 +25,8 @@ public class TheatreUtils {
 	private static final Pattern patternForNames = Pattern.compile("([ ]*+[0-9A-Za-z]++[ ]*+)+");
 	private static String rowValidationMessage = "Sorry,The input given is expected to be Number seperated by space for section in rows e.g '4 4 5' . Please try again..!";
 	private static String requestValidationMessage = "Sorry,The input given is expected to be Characters seperated by space followed by number e.g 'ABC 3' . Please try again..!";
-	private static String welcomeMessage = "Welcome,Please enter Layout details as no. of seats in section separated by space e.g  '2 2' . Press Press Enter to Start Entering Bookign Request..!";
-	private static String welcomeRequestMessage = "Please enter Booking Request with name and no. tickets separted by space 'ABC 3' Press Press Enter to View Booking Allocation Status and Exit..!";
+	private static String welcomeMessage = "Welcome,Please enter Layout details as no. of seats in section separated by space e.g  '2 2' .Press Enter to Start Entering Booking Request..!";
+	private static String welcomeRequestMessage = "Please enter Booking Request with name and no. tickets separated by space 'ABC 3' .Press Enter to View Booking Allocation Status and Exit..!";
 	private static String welcomeErrorRequestMessage = "Sorry, Problem with the Input format . Do not enter extra spaces and more than one entry in single row . Use the Format : 'Name TicketCount..!'";
 
 	
